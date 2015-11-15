@@ -23,19 +23,20 @@ namespace BFTests
             }
         }
 
-        [TestMethod, Description("Validates the results of running a valid piece of BF code.")]
+        [TestMethod]
         public void BasicBrainfuckTest()
         {
             Assert.AreEqual("Hello World!", RunMemoryBFTest(">+++++++++[<++++++++>-]<.>+++++++[<++++>-]<+.+++++++..+++.>>>++++++++[<++++>-]<.>>>++++++++++[<+++++++++>-]<---.<<<<.+++.------.--------.>>+."));
         }
 
-        [TestMethod, Description("Validates the results of running a BF code with cell-wrapping.")]
+        [TestMethod]
         public void CellWrappingTest()
         {
+            // Revision of execution tape. Supports negative cell values.
             Assert.AreEqual("H", RunMemoryBFTest("-[------->+<]>-."));
         }
 
-        [TestMethod, Description("Validates that the loop-start operator jumps beyond the loop-end when cell value is zero.")]
+        [TestMethod]
         public void LoopSkippingTest()
         {
             // The second loop should be skipped entirely since the cell value is zero.
@@ -49,7 +50,6 @@ namespace BFTests
             {
                 Brainfuck.Run("[++");
                 Brainfuck.Run("++]");
-                Brainfuck.Run("++[->++<]]");
             }
             catch (IndexOutOfRangeException)
             {

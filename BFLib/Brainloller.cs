@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 
 namespace BrainTools
 {
@@ -7,99 +8,122 @@ namespace BrainTools
     /// </summary>
     public static class Brainloller
     {
-        private enum Direction
+        private enum IPDirections
         {
-            east, west, north, south
+            East = 1,
+            South = 2,
+            West = 3,
+            North = 4
         };
+
+        private static BiDictionary<char, Color> ColorMap = new BiDictionary<char, Color>()
+        {
+            { '>', Color.FromArgb(255, 0, 0) },
+            { '<', Color.FromArgb(128, 0, 0) },
+            { '+', Color.FromArgb(0, 255, 0) },
+            { '-', Color.FromArgb(0, 128, 0) },
+            { '.', Color.FromArgb(0, 0, 255) },
+            { ',', Color.FromArgb(0, 0, 128) },
+            { '[', Color.FromArgb(255, 255, 0) },
+            { ']', Color.FromArgb(128, 128, 0) },
+            { '»', Color.FromArgb(0, 255, 255) }, // RotateCW
+            { '«', Color.FromArgb(0, 128, 128) }, // RotateCCW
+
+            // Extended Type 1
+            { '@', Color.FromArgb(0, 192, 64) },
+            { '$', Color.FromArgb(192, 64, 0) },
+            { '!', Color.FromArgb(64, 0, 192) },
+            { '}', Color.FromArgb(64, 192, 0) },
+            { '{', Color.FromArgb(192, 0, 64) },
+            { '~', Color.FromArgb(0, 64, 192) },
+            { '^', Color.FromArgb(0, 192, 0) },
+            { '&', Color.FromArgb(192, 0, 0) },
+            { '|', Color.FromArgb(0, 0, 192) }
+        };
+
+
+
+        /// <summary>
+        /// Encodes the given Brainfuck code into a square-shaped bitmap.
+        /// </summary>
+        /// <param name="code">
+        /// The Brainfuck code to insert.
+        /// </param>
+        /// <param name="gapFiller">
+        /// The color to use for NOPs.
+        /// </param>
+        /// <returns>
+        /// The encoded bitmap.
+        /// </returns>
+        public static Bitmap Encode(string code, Color gapFiller)
+        {
+            return Encode(code, (int)Math.Ceiling(Math.Sqrt(code.Length)), gapFiller);
+        }
 
         /// <summary>
         /// Encodes the given Brainfuck code into a bitmap.
         /// </summary>
-        /// <param name="code">The Brainfuck code to insert.</param>
-        /// <param name="width">The resulting bitmap width.</param>
-        /// <param name="gapFiller">The color to use for NOPs.</param>
-        /// <returns>The encoded bitmap.</returns>
+        /// <param name="code">
+        /// The Brainfuck code to insert.
+        /// </param>
+        /// <param name="width">
+        /// The resulting bitmap width.
+        /// </param>
+        /// <param name="gapFiller">
+        /// The color to use for NOPs.
+        /// </param>
+        /// <returns>
+        /// The encoded bitmap.
+        /// </returns>
         public static Bitmap Encode(string code, int width, Color gapFiller)
         {
-            if (CommandColors.IsCommandColor(gapFiller))
-                return null;
+            if (ColorMap.ContainsKey(gapFiller))
+                throw new ArgumentException("Specified GapFiller color is a system-reserved color.");
 
-            double _height = (double)code.Length / (width - 2);
-            int height = 0;
-            if (_height == (int)_height)
-                height = (int)_height;
-            else
-                height = (int)_height + 1;
+            int height = (int)Math.Ceiling(code.Length / (width - 2d));
 
             Bitmap newBmp = new Bitmap(width, height);
             int length = code.Length;
 
-            int curX = 1, curY = 0;
-            Direction dir = Direction.east;
+            int curX = 0, curY = 0;
+            IPDirections dir = IPDirections.East;
 
             for (int i = 0; i < code.Length; i++)
             {
                 Color clr = Color.FromArgb(0, 0, 0);
 
-                if (curX == newBmp.Width - 1 && dir == Direction.east)
+                if (curX == newBmp.Width - 1 && dir == IPDirections.East)
                 {
-                    newBmp.SetPixel(curX, curY, CommandColors.RotateCW);
-                    newBmp.SetPixel(curX, curY + 1, CommandColors.RotateCW);
+                    newBmp.SetPixel(curX, curY, ColorMap['»']);
+                    newBmp.SetPixel(curX, curY + 1, ColorMap['»']);
                     curX--;
                     curY++;
-                    dir = Direction.west;
+                    dir = IPDirections.West;
                 }
-                else if (curX == 0 && dir == Direction.west)
+                else if (curX == 0 && dir == IPDirections.West)
                 {
-                    newBmp.SetPixel(curX, curY, CommandColors.RotateCCW);
-                    newBmp.SetPixel(curX, curY + 1, CommandColors.RotateCCW);
+                    newBmp.SetPixel(curX, curY, ColorMap['«']);
+                    newBmp.SetPixel(curX, curY + 1, ColorMap['«']);
                     curX++;
                     curY++;
-                    dir = Direction.east;
+                    dir = IPDirections.East;
                 }
 
-                switch (code[i])
-                {
-                    case '>':
-                        clr = CommandColors.Right;
-                        break;
-                    case '<':
-                        clr = CommandColors.Left;
-                        break;
-                    case '+':
-                        clr = CommandColors.Inc;
-                        break;
-                    case '-':
-                        clr = CommandColors.Dec;
-                        break;
-                    case '.':
-                        clr = CommandColors.Print;
-                        break;
-                    case ',':
-                        clr = CommandColors.Read;
-                        break;
-                    case '[':
-                        clr = CommandColors.LoopStart;
-                        break;
-                    case ']':
-                        clr = CommandColors.LoopEnd;
-                        break;
-                    default:
-                        continue;
-                }
+                if (!ColorMap.TryGetValue(code[i], out clr))
+                    continue;
 
                 newBmp.SetPixel(curX, curY, clr);
 
-                if (dir == Direction.east)
+                if (dir == IPDirections.East)
                     curX++;
-                if (dir == Direction.west)
+                else if (dir == IPDirections.West)
                     curX--;
             }
 
-            if (dir == Direction.east)
+            if (dir == IPDirections.East)
                 for (int i = curX; i < newBmp.Width; i++)
                     newBmp.SetPixel(i, curY, gapFiller);
-            else if (dir == Direction.west)
+            else if (dir == IPDirections.West)
                 for (int i = curX; i > -1; i--)
                     newBmp.SetPixel(i, curY, gapFiller);
 
@@ -109,88 +133,55 @@ namespace BrainTools
         /// <summary>
         /// Decodes the given Brainloller bitmap.
         /// </summary>
-        /// <param name="bmp">The bitmap to decode.</param>
-        /// <returns>The Brainfuck code contained in the bitmap.</returns>
+        /// <param name="bmp">
+        /// The bitmap to decode.
+        /// </param>
+        /// <returns>
+        /// The Brainfuck code contained in the bitmap.
+        /// </returns>
         public static string Decode(Bitmap bmp)
         {
-            string code = "";
-            Direction dir = Direction.east;
+            string code = string.Empty;
+            IPDirections dir = IPDirections.East;
             int curX = 0, curY = 0;
 
             while ((curX >= 0 && curX < bmp.Width) && (curY >= 0 && curY < bmp.Height))
             {
                 Color clr = bmp.GetPixel(curX, curY);
 
-                if (clr.Equals(CommandColors.Right))
-                    code += ">";
-                if (clr.Equals(CommandColors.Left))
-                    code += "<";
-                if (clr.Equals(CommandColors.Inc))
-                    code += "+";
-                if (clr.Equals(CommandColors.Dec))
-                    code += "-";
-                if (clr.Equals(CommandColors.Print))
-                    code += ".";
-                if (clr.Equals(CommandColors.Read))
-                    code += ",";
-                if (clr.Equals(CommandColors.LoopStart))
-                    code += "[";
-                if (clr.Equals(CommandColors.LoopEnd))
-                    code += "]";
+                char c;
+                if (ColorMap.TryGetValue(clr, out c))
+                {
+                    if (c == '»')
+                    {
+                        dir += 1;
 
-                if (clr.Equals(CommandColors.RotateCW))
-                {
-                    switch (dir)
-                    {
-                        case Direction.east:
-                            dir = Direction.south;
-                            break;
-                        case Direction.south:
-                            dir = Direction.west;
-                            break;
-                        case Direction.west:
-                            dir = Direction.north;
-                            break;
-                        case Direction.north:
-                            dir = Direction.east;
-                            break;
-                        default:
-                            break;
+                        if (!Enum.IsDefined(typeof(IPDirections), dir))
+                            dir = IPDirections.East;
                     }
-                }
-                if (clr.Equals(CommandColors.RotateCCW))
-                {
-                    switch (dir)
+                    else if (c == '«')
                     {
-                        case Direction.east:
-                            dir = Direction.north;
-                            break;
-                        case Direction.south:
-                            dir = Direction.east;
-                            break;
-                        case Direction.west:
-                            dir = Direction.south;
-                            break;
-                        case Direction.north:
-                            dir = Direction.west;
-                            break;
-                        default:
-                            break;
+                        dir -= 1;
+
+                        if (!Enum.IsDefined(typeof(IPDirections), dir))
+                            dir = IPDirections.North;
                     }
+                    else
+                        code += c;
                 }
 
                 switch (dir)
                 {
-                    case Direction.east:
+                    case IPDirections.East:
                         curX++;
                         break;
-                    case Direction.west:
+                    case IPDirections.West:
                         curX--;
                         break;
-                    case Direction.north:
+                    case IPDirections.North:
                         curY--;
                         break;
-                    case Direction.south:
+                    case IPDirections.South:
                         curY++;
                         break;
                     default:
@@ -204,9 +195,15 @@ namespace BrainTools
         /// <summary>
         /// Shrinks the given bitmap.
         /// </summary>
-        /// <param name="bmp">The bitmap to shrink.</param>
-        /// <param name="pxDimension">The factor by which to shrink the bitmap.</param>
-        /// <returns>The reduced bitmap.</returns>
+        /// <param name="bmp">
+        /// The bitmap to shrink.
+        /// </param>
+        /// <param name="pxDimension">
+        /// The factor by which to shrink the bitmap.
+        /// </param>
+        /// <returns>
+        /// The reduced bitmap.
+        /// </returns>
         public static Bitmap Reduce(Bitmap bmp, int pxDimension)
         {
             Bitmap newBmp = new Bitmap(bmp.Width / pxDimension, bmp.Height / pxDimension);
@@ -221,9 +218,15 @@ namespace BrainTools
         /// <summary>
         /// Enlarges the given bitmap.
         /// </summary>
-        /// <param name="bmp">The bitmap to enlarge.</param>
-        /// <param name="pxDimension">The factor by which to enlarge the bitmap.</param>
-        /// <returns>The enlarged bitmap.</returns>
+        /// <param name="bmp">
+        /// The bitmap to enlarge.
+        /// </param>
+        /// <param name="pxDimension">
+        /// The factor by which to enlarge the bitmap.
+        /// </param>
+        /// <returns>
+        /// The enlarged bitmap.
+        /// </returns>
         public static Bitmap Enlarge(Bitmap bmp, int pxDimension)
         {
             Bitmap newBmp = new Bitmap(bmp.Width * pxDimension, bmp.Height * pxDimension);

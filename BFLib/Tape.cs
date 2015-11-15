@@ -5,12 +5,12 @@ namespace BrainTools
     /// <summary>
     /// A class for managing a Brainfuck tape.
     /// </summary>
-    internal class Tape
+    public class Tape
     {
         const int MIN_CELL_VALUE = 0, MAX_CELL_VALUE = 255;
 
         private List<int> content;
-        internal int Pointer;
+        public int Pointer { get; set; }
 
 
 
@@ -31,11 +31,6 @@ namespace BrainTools
             }
             set
             {
-                /*
-                 * If the assigned value is larger than the byte's size, keep deducting
-                 * the max byte size, until the value is smaller. If deducted, finally
-                 * reduce the value by one.
-                */
                 bool mod = false;
                 while (value > MAX_CELL_VALUE)
                 {
@@ -46,11 +41,6 @@ namespace BrainTools
                 if (mod)
                     value--;
 
-                /*
-                 * If the assigned value is smaller than the zero, keep adding the max
-                 * byte size, until the value is greater. If added, finally add the value
-                 * by one.
-                */
                 mod = false;
                 while (value < -MAX_CELL_VALUE)
                 {
@@ -65,6 +55,27 @@ namespace BrainTools
                     value = (MAX_CELL_VALUE + 1) + value;
 
                 this.content[this.Pointer] = value;
+            }
+        }
+
+        public List<int> Content
+        {
+            get
+            {
+                return this.content;
+            }
+            set
+            {
+                if (value == null)
+                    this.content.Clear();
+                else
+                    this.content = value;
+
+                if (this.content.Count == 0)
+                    this.content.Add(0);
+
+                if (this.Pointer > this.content.Count)
+                    this.Pointer = this.content.Count - 1;
             }
         }
 

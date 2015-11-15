@@ -1,9 +1,6 @@
-﻿using System;
-using System.Drawing;
-using System.IO;
+﻿using ManyConsole;
+using System;
 using System.Collections.Generic;
-
-using ManyConsole;
 
 namespace BrainTools
 {
@@ -11,8 +8,9 @@ namespace BrainTools
     {
         static int Main(string[] args)
         {
-            //string code = ">+++++++++[<++++++++>-]<.>+++++++[<++++>-]<+.+++++++..+++.>>>++++++++[<++++>-]<.>>>++++++++++[<+++++++++>-]<---.<<<<.+++.------.--------.>>+.";
-            //string code2 = "++++++++++[>+>++>+++>++++>+++++>++++++>+++++++>++++++++>+++++++++>++++++++++>+++++++++++>++++++++++++>+++++++++++++<<<<<<<<<<<<<-]>>>>>>>>--------.>>---.>>--------..>---------.<<<<<<<<<--------.>>>----.>>>>-----.>++.++.<-.----.<.>>>.<<<<<<<<<+.";
+#if DEBUG
+            Tests.RunTests();
+#endif
 
             List<ConsoleCommand> commands = new List<ConsoleCommand>()
             {

@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BrainTools", "BrainTools\Br
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BFLib", "BFLib\BFLib.csproj", "{9FBB13F0-F0EA-44E3-AAE1-52B02D0766C6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BFTests", "BFTests\BFTests.csproj", "{8EBAAD50-1CB1-4A30-B464-AAF17DD04D90}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BFTests", "BFTests\BFTests.csproj", "{4BA39900-4C3D-4C49-8696-E9FCEE00DEFC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,16 +39,16 @@ Global
 		{9FBB13F0-F0EA-44E3-AAE1-52B02D0766C6}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{9FBB13F0-F0EA-44E3-AAE1-52B02D0766C6}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{9FBB13F0-F0EA-44E3-AAE1-52B02D0766C6}.Release|x86.ActiveCfg = Release|Any CPU
-		{8EBAAD50-1CB1-4A30-B464-AAF17DD04D90}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8EBAAD50-1CB1-4A30-B464-AAF17DD04D90}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8EBAAD50-1CB1-4A30-B464-AAF17DD04D90}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{8EBAAD50-1CB1-4A30-B464-AAF17DD04D90}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{8EBAAD50-1CB1-4A30-B464-AAF17DD04D90}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{8EBAAD50-1CB1-4A30-B464-AAF17DD04D90}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8EBAAD50-1CB1-4A30-B464-AAF17DD04D90}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8EBAAD50-1CB1-4A30-B464-AAF17DD04D90}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{8EBAAD50-1CB1-4A30-B464-AAF17DD04D90}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{8EBAAD50-1CB1-4A30-B464-AAF17DD04D90}.Release|x86.ActiveCfg = Release|Any CPU
+		{4BA39900-4C3D-4C49-8696-E9FCEE00DEFC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4BA39900-4C3D-4C49-8696-E9FCEE00DEFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4BA39900-4C3D-4C49-8696-E9FCEE00DEFC}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{4BA39900-4C3D-4C49-8696-E9FCEE00DEFC}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{4BA39900-4C3D-4C49-8696-E9FCEE00DEFC}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4BA39900-4C3D-4C49-8696-E9FCEE00DEFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4BA39900-4C3D-4C49-8696-E9FCEE00DEFC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4BA39900-4C3D-4C49-8696-E9FCEE00DEFC}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{4BA39900-4C3D-4C49-8696-E9FCEE00DEFC}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{4BA39900-4C3D-4C49-8696-E9FCEE00DEFC}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
