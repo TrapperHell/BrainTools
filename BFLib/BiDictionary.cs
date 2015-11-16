@@ -13,7 +13,7 @@ namespace BrainTools
 
         public BiDictionary(IDictionary<T1, T2> dictionary)
         {
-            foreach(KeyValuePair<T1,T2> kvp in dictionary)
+            foreach (KeyValuePair<T1, T2> kvp in dictionary)
                 Add(kvp.Key, kvp.Value);
         }
 

@@ -31,6 +31,11 @@ namespace BrainTools
             }
             set
             {
+                /*
+                 * If the assigned value is larger than the byte's size, keep deducting
+                 * the max byte size, until the value is smaller. If deducted, finally
+                 * reduce the value by one.
+                */
                 bool mod = false;
                 while (value > MAX_CELL_VALUE)
                 {
@@ -41,6 +46,11 @@ namespace BrainTools
                 if (mod)
                     value--;
 
+                /*
+                 * If the assigned value is smaller than the zero, keep adding the max
+                 * byte size, until the value is greater. If added, finally add the value
+                 * by one.
+                */
                 mod = false;
                 while (value < -MAX_CELL_VALUE)
                 {

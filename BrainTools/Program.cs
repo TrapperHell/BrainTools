@@ -1,6 +1,6 @@
-﻿using ManyConsole;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using ManyConsole;
 
 namespace BrainTools
 {
@@ -8,10 +8,6 @@ namespace BrainTools
     {
         static int Main(string[] args)
         {
-#if DEBUG
-            Tests.RunTests();
-#endif
-
             List<ConsoleCommand> commands = new List<ConsoleCommand>()
             {
                 new RunCommand(),

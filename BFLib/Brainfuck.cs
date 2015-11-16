@@ -32,29 +32,18 @@ namespace BrainTools
 
 
         /// <summary>
-        /// Runs the provided Brainfuck code.
+        /// Finds the most relevant BF interpreter for the provided code and runs it.
         /// </summary>
         /// <param name="code">
-        /// The code to run.
+        /// The Brainfuck code to run.
         /// </param>
-        /// <param name="stdin">
-        /// Optional. The input stream. Console is used if not specified.
-        /// </param>
-        /// <param name="stdout">
-        /// Optional. The ouput stream. Console is used if not specified.
-        /// </param>
-        public static void Run(string code, Stream stdin = null, Stream stdout = null)
+        public static void Run(string code)
         {
             if (String.IsNullOrWhiteSpace(code))
                 return;
 
-            if (stdin == null)
-                stdin = Console.OpenStandardInput();
-            if (stdout == null)
-                stdout = Console.OpenStandardOutput();
-            
             List<IBrainFuckInterpreter> bfInterpreters = new List<IBrainFuckInterpreter>();
-            bfInterpreterTypes.ForEach(bfit => bfInterpreters.Add((IBrainFuckInterpreter)Activator.CreateInstance(bfit, stdin, stdout)));
+            bfInterpreterTypes.ForEach(bfit => bfInterpreters.Add((IBrainFuckInterpreter)Activator.CreateInstance(bfit)));
             bfInterpreters = bfInterpreters.OrderBy(bfi => bfi.GetSupportedCommands().Length).ToList();
 
             // Get the Brainfuck interpreter with the most supported commands...

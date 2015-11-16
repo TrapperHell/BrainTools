@@ -1,8 +1,8 @@
-﻿using BrainTools;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
+﻿using System;
 using System.IO;
 using System.Text;
+using BrainTools;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace BFTests
 {
@@ -17,26 +17,27 @@ namespace BFTests
             using (MemoryStream msOut = new MemoryStream())
             using (MemoryStream msIn = new MemoryStream(Encoding.ASCII.GetBytes(inputCode)))
             {
-                Brainfuck.Run(bfCode, msIn, msOut);
+                var bf = new BrainfuckExtendedType1Interpreter(msIn, msOut);
+                bf.Run(bfCode);
 
                 return Encoding.ASCII.GetString(msOut.ToArray());
             }
         }
 
-        [TestMethod]
+        [TestMethod, Description("Validates the results of running a valid piece of BF code.")]
         public void BasicBrainfuckTest()
         {
             Assert.AreEqual("Hello World!", RunMemoryBFTest(">+++++++++[<++++++++>-]<.>+++++++[<++++>-]<+.+++++++..+++.>>>++++++++[<++++>-]<.>>>++++++++++[<+++++++++>-]<---.<<<<.+++.------.--------.>>+."));
+            Assert.AreEqual("Happy Birthday!", RunMemoryBFTest("++++++++++[>+>++>+++>++++>+++++>++++++>+++++++>++++++++>+++++++++>++++++++++>+++++++++++>++++++++++++>+++++++++++++<<<<<<<<<<<<<-]>>>>>>>>--------.>>---.>>--------..>---------.<<<<<<<<<--------.>>>----.>>>>-----.>++.++.<-.----.<.>>>.<<<<<<<<<+."));
         }
 
-        [TestMethod]
+        [TestMethod, Description("Validates the results of running a BF code with cell-wrapping.")]
         public void CellWrappingTest()
         {
-            // Revision of execution tape. Supports negative cell values.
             Assert.AreEqual("H", RunMemoryBFTest("-[------->+<]>-."));
         }
 
-        [TestMethod]
+        [TestMethod, Description("Validates that the loop-start operator jumps beyond the loop-end when cell value is zero.")]
         public void LoopSkippingTest()
         {
             // The second loop should be skipped entirely since the cell value is zero.
@@ -44,18 +45,12 @@ namespace BFTests
         }
 
         [TestMethod]
+        [ExpectedException(typeof(IndexOutOfRangeException), "Invalid BF code provided.")]
         public void UnmatchedLoopTokenTest()
         {
-            try
-            {
-                Brainfuck.Run("[++");
-                Brainfuck.Run("++]");
-            }
-            catch (IndexOutOfRangeException)
-            {
-                // Test fails
-                Assert.Fail();
-            }
+            Brainfuck.Run("[++");
+            Brainfuck.Run("++]");
+            Brainfuck.Run("++[->++<]]");
         }
     }
 }

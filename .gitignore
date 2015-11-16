@@ -33,6 +33,7 @@
 **/*.dotCover
 
 /packages/ 
+**/.vs/
 
 # Others
 [Bb]in

@@ -41,7 +41,7 @@ namespace BrainTools
             this.tape = new Tape();
             this.instructions = code.ToCharArray();
 
-            while (this.instructionPointer >= 0 && this.instructionPointer < instructions.Length)
+            while (this.instructionPointer < instructions.Length)
                 ProcessInstruction(instructions[this.instructionPointer]);
         }
 
@@ -132,8 +132,9 @@ namespace BrainTools
                     if (tape.Cell == 0)
                     {
                         this.loopCounter++;
-                        while (this.loopCounter != 0 && ++this.instructionPointer < this.instructions.Length)
+                        while (this.loopCounter != 0)
                         {
+                            this.instructionPointer++;
                             if (this.instructions[this.instructionPointer] == '[')
                                 this.loopCounter++;
                             else if (this.instructions[this.instructionPointer] == ']')
@@ -143,8 +144,9 @@ namespace BrainTools
                     break;
                 case ']':
                     this.loopCounter++;
-                    while (this.loopCounter != 0 && --this.instructionPointer >= 0)
+                    while (this.loopCounter != 0)
                     {
+                        this.instructionPointer--;
                         if (this.instructions[this.instructionPointer] == ']')
                             this.loopCounter++;
                         else if (this.instructions[this.instructionPointer] == '[')
